@@ -42,6 +42,7 @@
   [:as {{:keys [database], :as query} :body}]
   {database s/Int}
   ;; don't permissions check the 'database' if it's the virtual database. That database doesn't actually exist :-)
+  ;;todo: log user + query here & figure out if field id can be replaced by name
   (when-not (= database mbql.s/saved-questions-virtual-database-id)
     (api/read-check Database database))
   ;; add sensible constraints for results limits on our query
@@ -81,6 +82,7 @@
   {query         su/JSONString
    export-format ExportFormat}
   (let [{:keys [database] :as query} (json/parse-string query keyword)]
+    ;;todo: log user + query here & figure out if field id can be replaced by name
     (when-not (= database mbql.s/saved-questions-virtual-database-id)
       (api/read-check Database database))
     (let [query (-> (assoc query :async? true)
